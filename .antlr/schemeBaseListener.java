@@ -28,13 +28,13 @@ public class schemeBaseListener implements schemeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressio(schemeParser.ExpressioContext ctx) { }
+	@Override public void enterExpressioBasiques(schemeParser.ExpressioBasiquesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpressio(schemeParser.ExpressioContext ctx) { }
+	@Override public void exitExpressioBasiques(schemeParser.ExpressioBasiquesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -47,6 +47,66 @@ public class schemeBaseListener implements schemeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressioBasica(schemeParser.ExpressioBasicaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpressio(schemeParser.ExpressioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpressio(schemeParser.ExpressioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSuma(schemeParser.SumaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSuma(schemeParser.SumaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterResta(schemeParser.RestaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitResta(schemeParser.RestaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiplicacio(schemeParser.MultiplicacioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiplicacio(schemeParser.MultiplicacioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDivisio(schemeParser.DivisioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDivisio(schemeParser.DivisioContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

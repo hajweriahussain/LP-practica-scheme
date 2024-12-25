@@ -1,4 +1,3 @@
-// Gramàtica per expressions senzilles
 grammar scheme;
 root : expressionsBasiques*             // l'etiqueta ja és root
      ;
