@@ -33,7 +33,7 @@ def serializedATN():
         0,0
     ]
 
-class schemeLexer(Lexer):
+class SchemeLexer(Lexer):
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
