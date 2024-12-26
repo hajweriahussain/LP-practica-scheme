@@ -19,6 +19,7 @@ class EvalVisitor(schemeVisitor):
         var_name = ctx.VAR().getText()
         value = self.visit(ctx.expression())
         self.enviroment[var_name] = value
+        print(f"Variable definida: {var_name} = {value}")  # Depuración opcional
         return None  
 
     def visitDefineFunction(self, ctx):
@@ -76,10 +77,39 @@ class EvalVisitor(schemeVisitor):
         
     def visitCondExpression(self, ctx):
         for clause in ctx.condClause():
-            condition = self.visit(clause.expression(0))  # Evalúa la condición
+            condition = self.visit(clause.expression(0))  
             if condition:
-                return self.visit(clause.expression(1))  # Evalúa el valor asociado
+                return self.visit(clause.expression(1))  
         raise ValueError("No matching condition found in cond")
+    
+    def visitListLiteral(self, ctx):
+        return [self.visit(expr) for expr in ctx.expression()]
+    
+
+    def visitCarFunction(self, ctx):
+        lst = self.visit(ctx.expression()) 
+        if not isinstance(lst, list) or not lst: 
+            raise ValueError("car expects a non-empty list")
+        return lst[0] 
+
+
+    def visitCdrFunction(self, ctx):
+        lst = self.visit(ctx.expression())
+        if not isinstance(lst, list) or not lst:
+            raise ValueError("cdr expects a non-empty list")
+        return lst[1:]
+
+    def visitConsFunction(self, ctx):
+        element = self.visit(ctx.expression(0))
+        lst = self.visit(ctx.expression(1))
+        if not isinstance(lst, list):
+            raise ValueError("cons expects a list as the second argument")
+        return [element] + lst
+
+    def visitNullFunction(self, ctx):
+        lst = self.visit(ctx.expression())
+        return lst == []
+
 
     def visitVariable(self, ctx):
         var_name = ctx.VAR().getText()
