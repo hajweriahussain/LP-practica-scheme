@@ -23,12 +23,15 @@ def main():
     parser = schemeParser(token_stream)
     tree = parser.root()
 
-    print(tree.toStringTree(recog=parser))  # Opcional: Muestra el árbol sintáctico.
+    # print(tree.toStringTree(recog=parser))  # Opcional: Muestra el árbol sintáctico.
 
     visitor = EvalVisitor()
-    result = visitor.visit(tree)
-
-    print(result)
+    try:
+        result = visitor.visit(tree)
+        if result is not None:  # Muestra el resultado si existe
+            print(result)
+    except Exception as e:
+        print(f"Error: {e}")  # Muestra solo el mensaje de error
 
 if __name__ == "__main__":
     main()

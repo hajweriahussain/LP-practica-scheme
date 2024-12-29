@@ -1,4 +1,3 @@
-
 from schemeVisitor import schemeVisitor
 
 class EvalVisitor(schemeVisitor):
@@ -7,10 +6,13 @@ class EvalVisitor(schemeVisitor):
         self.enviroment = {}  
 
     def visitRoot(self, ctx):
-        result = None
+        results = []
         for statement in ctx.statement():
             result = self.visit(statement)
-        return result
+            print(result) 
+            if result is not None:
+                results.append(result)
+        # return results
     
     def visitExpressionStatement(self, ctx):
         return self.visit(ctx.expression())
@@ -32,6 +34,7 @@ class EvalVisitor(schemeVisitor):
     def visitOpExpression(self, ctx):
         operator = ctx.operation().getText()
         operands = [self.visit(expr) for expr in ctx.expression()]
+        
         if operator == '+':
             return operands[0] + operands[1]
         elif operator == '-':
@@ -41,17 +44,19 @@ class EvalVisitor(schemeVisitor):
         elif operator == '/':
             return operands[0] / operands[1]
         elif operator == '<':
-            return operands[0] < operands[1]
+            return "#t" if operands[0] < operands[1] else "#f"
         elif operator == '>':
-            return operands[0] > operands[1]
+            return "#t" if operands[0] > operands[1] else "#f"
         elif operator == '<=':
-            return operands[0] <= operands[1]
+            return "#t" if operands[0] <= operands[1] else "#f"
         elif operator == '>=':
-            return operands[0] >= operands[1]
+            return "#t" if operands[0] >= operands[1] else "#f"
         elif operator == '=':
-            return operands[0] == operands[1]
+            return "#t" if operands[0] == operands[1] else "#f"
         elif operator == '<>':
-            return operands[0] != operands[1]
+            return "#t" if operands[0] != operands[1] else "#f"
+        else:
+            raise ValueError(f"Unsupported operator: {operator}")
         
     def visitFunctionCall(self, ctx):
         func_name = ctx.VAR().getText()
@@ -109,6 +114,37 @@ class EvalVisitor(schemeVisitor):
     def visitNullFunction(self, ctx):
         lst = self.visit(ctx.expression())
         return lst == []
+    
+    def visitLetExpression(self, ctx):
+        # Crea un entorno temporal
+        original_env = self.enviroment.copy()
+        for pair in ctx.letPair():
+            var_name = pair.VAR().getText()  # Nombre de la variable
+            value = self.visit(pair.expression())  # Valor de la expresión
+            self.enviroment[var_name] = value  # Guarda en el entorno temporal
+        
+        # Evalúa la expresión con el entorno temporal
+        result = self.visit(ctx.expression())
+        
+        # Restaura el entorno original
+        self.enviroment = original_env
+        return result
+    
+    def visitAndExpression(self, ctx):
+        for expr in ctx.expression():
+            if self.visit(expr) == "#f":  # Si algún argumento es falso, retorna #f
+                return "#f"
+        return "#t"  # Todos los argumentos son verdaderos
+
+    def visitOrExpression(self, ctx):
+        for expr in ctx.expression():
+            if self.visit(expr) == "#t":  # Si algún argumento es verdadero, retorna #t
+                return "#t"
+        return "#f"  # Todos los argumentos son falsos
+
+    def visitNotExpression(self, ctx):
+        value = self.visit(ctx.expression())
+        return "#f" if value == "#t" else "#t"  # Invierte el valor booleano
 
 
     def visitVariable(self, ctx):
@@ -121,8 +157,7 @@ class EvalVisitor(schemeVisitor):
         return ctx.STRING().getText().strip('"')  
 
     def visitBool(self, ctx):
-        bool_value = ctx.BOOL().getText()
-        return bool_value == "#t" 
+        return ctx.BOOL().getText()  # Devuelve directamente #t o #f
 
     def visitNumber(self, ctx):
         return int(ctx.NUM().getText())

@@ -5,17 +5,20 @@ RPAREN : ')' ;
 DEFINE : 'define' ;
 IF : 'if' ;
 BOOL: '#t' | '#f';
+AND: 'and' ;
+OR: 'or' ;
+NOT: 'not' ;
 COND: 'cond' ;
 CAR : 'car' ;
 CDR : 'cdr';
 CONS : 'cons';
 NULL : 'null?';
+LET: 'let' ;
 QUOTE : '\'';
 VAR: [a-zA-Z_][a-zA-Z0-9_]* ;
 NUM: [0-9]+ ;
 STRING: '"' (~["\r\n])* '"';
 COMMENT: ';' ~[\r\n]* -> skip;
-
 
 
 root
@@ -39,13 +42,21 @@ expression
     | LPAREN CONS expression expression RPAREN              # ConsFunction
     | LPAREN NULL expression RPAREN                         # NullFunction
     | QUOTE LPAREN expression* RPAREN                       # ListLiteral
+    | LPAREN LET LPAREN letPair+ RPAREN expression RPAREN # LetExpression
+    | LPAREN AND expression+ RPAREN                         # AndExpression
+    | LPAREN OR expression+ RPAREN                          # OrExpression
+    | LPAREN NOT expression RPAREN                          # NotExpression
     | VAR                                                   # Variable
-    |STRING                                                 # String
-    |BOOL                                                   # Bool
+    | STRING                                                 # String
+    | BOOL                                                   # Bool
     | NUM                                                   # Number
     ;
 
 condClause: LPAREN expression expression RPAREN            # Cond
+    ;
+
+letPair
+    : LPAREN VAR expression RPAREN                          # LetBinding
     ;
 
 operation: '+' | '-' | '*' | '/' | '<' | '>' | '<=' | '>=' | '=' | '<>';
