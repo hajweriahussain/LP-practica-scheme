@@ -94,6 +94,26 @@ class schemeVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by schemeParser#ModExpression.
+    def visitModExpression(self, ctx:schemeParser.ModExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by schemeParser#DisplayFunction.
+    def visitDisplayFunction(self, ctx:schemeParser.DisplayFunctionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by schemeParser#NewlineFunction.
+    def visitNewlineFunction(self, ctx:schemeParser.NewlineFunctionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by schemeParser#ReadFunction.
+    def visitReadFunction(self, ctx:schemeParser.ReadFunctionContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by schemeParser#Variable.
     def visitVariable(self, ctx:schemeParser.VariableContext):
         return self.visitChildren(ctx)

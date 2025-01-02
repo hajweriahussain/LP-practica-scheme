@@ -14,8 +14,12 @@ CDR : 'cdr';
 CONS : 'cons';
 NULL : 'null?';
 LET: 'let' ;
-QUOTE : '\'';
-VAR: [a-zA-Z_][a-zA-Z0-9_]* ;
+READ : 'read';
+DISPLAY : 'display';
+NEWLINE : 'newline';
+SLASH : '\'';
+MOD: 'mod' ;
+VAR: [a-zA-Z_][a-zA-Z0-9_?-]* ;
 NUM: [0-9]+ ;
 STRING: '"' (~["\r\n])* '"';
 COMMENT: ';' ~[\r\n]* -> skip;
@@ -28,7 +32,7 @@ root
 statement
     : expression                                                 # ExpressionStatement
     | LPAREN DEFINE VAR expression RPAREN                        # DefineVar
-    | LPAREN DEFINE LPAREN VAR VAR* RPAREN expression RPAREN     # DefineFunction
+    | LPAREN DEFINE LPAREN VAR VAR* RPAREN expression+ RPAREN # DefineFunction
     ;
 
 expression
@@ -36,16 +40,19 @@ expression
     | LPAREN VAR expression* RPAREN                         # FunctionCall
     | LPAREN IF expression expression expression RPAREN     # IfExpression
     | LPAREN COND condClause+ RPAREN                        # CondExpression
-    | LPAREN COND condClause+ RPAREN                        # CondExpression
     | LPAREN CAR expression RPAREN                          # CarFunction
     | LPAREN CDR expression RPAREN                          # CdrFunction
     | LPAREN CONS expression expression RPAREN              # ConsFunction
     | LPAREN NULL expression RPAREN                         # NullFunction
-    | QUOTE LPAREN expression* RPAREN                       # ListLiteral
-    | LPAREN LET LPAREN letPair+ RPAREN expression RPAREN # LetExpression
+    | SLASH LPAREN expression* RPAREN                       # ListLiteral
+    | LPAREN LET LPAREN letPair+ RPAREN expression+ RPAREN # LetExpression
     | LPAREN AND expression+ RPAREN                         # AndExpression
     | LPAREN OR expression+ RPAREN                          # OrExpression
     | LPAREN NOT expression RPAREN                          # NotExpression
+    | LPAREN MOD expression expression RPAREN                               # ModExpression
+    | LPAREN DISPLAY expression RPAREN                      # DisplayFunction
+    | LPAREN NEWLINE RPAREN                                 # NewlineFunction
+    | LPAREN READ RPAREN                                    # ReadFunction
     | VAR                                                   # Variable
     | STRING                                                 # String
     | BOOL                                                   # Bool
@@ -59,6 +66,6 @@ letPair
     : LPAREN VAR expression RPAREN                          # LetBinding
     ;
 
-operation: '+' | '-' | '*' | '/' | '<' | '>' | '<=' | '>=' | '=' | '<>';
+operation: '+' | '-' | '*' | '/' | '<' | '>' | '<=' | '>=' | '=' | '<>' ;
 
 WS : [ \t\n\r]+ -> skip ;
