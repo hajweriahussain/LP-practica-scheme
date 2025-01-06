@@ -20,7 +20,7 @@ NEWLINE : 'newline';
 SLASH : '\'';
 MOD: 'mod' ;
 VAR: [a-zA-Z_][a-zA-Z0-9_?-]* ;
-NUM: [0-9]+ ;
+NUM: '-'? [0-9]+ ;
 STRING: '"' (~["\r\n])* '"';
 COMMENT: ';' ~[\r\n]* -> skip;
 
@@ -49,7 +49,7 @@ expression
     | LPAREN AND expression+ RPAREN                         # AndExpression
     | LPAREN OR expression+ RPAREN                          # OrExpression
     | LPAREN NOT expression RPAREN                          # NotExpression
-    | LPAREN MOD expression expression RPAREN                               # ModExpression
+    | LPAREN MOD expression expression RPAREN               # ModExpression
     | LPAREN DISPLAY expression RPAREN                      # DisplayFunction
     | LPAREN NEWLINE RPAREN                                 # NewlineFunction
     | LPAREN READ RPAREN                                    # ReadFunction
@@ -63,7 +63,7 @@ condClause: LPAREN expression expression RPAREN            # Cond
     ;
 
 letPair
-    : LPAREN VAR expression RPAREN                          # LetBinding
+    : LPAREN VAR expression RPAREN                        
     ;
 
 operation: '+' | '-' | '*' | '/' | '<' | '>' | '<=' | '>=' | '=' | '<>' ;

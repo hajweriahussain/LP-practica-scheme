@@ -987,32 +987,22 @@ public class schemeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class LetPairContext extends ParserRuleContext {
-		public LetPairContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_letPair; }
-	 
-		public LetPairContext() { }
-		public void copyFrom(LetPairContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class LetBindingContext extends LetPairContext {
 		public TerminalNode LPAREN() { return getToken(schemeParser.LPAREN, 0); }
 		public TerminalNode VAR() { return getToken(schemeParser.VAR, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode RPAREN() { return getToken(schemeParser.RPAREN, 0); }
-		public LetBindingContext(LetPairContext ctx) { copyFrom(ctx); }
+		public LetPairContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_letPair; }
 	}
 
 	public final LetPairContext letPair() throws RecognitionException {
 		LetPairContext _localctx = new LetPairContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_letPair);
 		try {
-			_localctx = new LetBindingContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(178);
