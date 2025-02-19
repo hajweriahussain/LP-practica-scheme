@@ -19,7 +19,7 @@ public class schemeLexer extends Lexer {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, LPAREN=11, RPAREN=12, DEFINE=13, IF=14, BOOL=15, AND=16, OR=17, 
 		NOT=18, COND=19, CAR=20, CDR=21, CONS=22, NULL=23, LET=24, READ=25, DISPLAY=26, 
-		NEWLINE=27, SLASH=28, MOD=29, VAR=30, NUM=31, STRING=32, COMMENT=33, WS=34;
+		NEWLINE=27, QUOTE=28, MOD=29, VAR=30, NUM=31, STRING=32, COMMENT=33, WS=34;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -33,7 +33,7 @@ public class schemeLexer extends Lexer {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
 			"T__9", "LPAREN", "RPAREN", "DEFINE", "IF", "BOOL", "AND", "OR", "NOT", 
 			"COND", "CAR", "CDR", "CONS", "NULL", "LET", "READ", "DISPLAY", "NEWLINE", 
-			"SLASH", "MOD", "VAR", "NUM", "STRING", "COMMENT", "WS"
+			"QUOTE", "MOD", "VAR", "NUM", "STRING", "COMMENT", "WS"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -51,7 +51,7 @@ public class schemeLexer extends Lexer {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, "LPAREN", 
 			"RPAREN", "DEFINE", "IF", "BOOL", "AND", "OR", "NOT", "COND", "CAR", 
-			"CDR", "CONS", "NULL", "LET", "READ", "DISPLAY", "NEWLINE", "SLASH", 
+			"CDR", "CONS", "NULL", "LET", "READ", "DISPLAY", "NEWLINE", "QUOTE", 
 			"MOD", "VAR", "NUM", "STRING", "COMMENT", "WS"
 		};
 	}

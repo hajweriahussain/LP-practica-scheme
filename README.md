@@ -35,17 +35,42 @@ make clean
 - `entrada_*.inp`: Fitxers que inclouen els valors o dades que el programa necessita com a entrada durant la seva execució. Per exemple, si el codi utilitza la funció `read`, aquests fitxers contindran els valors que l'intèrpret llegirà.
 - `sortida_*.out`: Fitxers on es desa la sortida generada després d'executar el programa Scheme amb una entrada determinada.
 
-## Funcionalitats implementades
-- **Operacions bàsiques**  
-    L'intèrpret suporta l'avaluació d'expressions bàsiques, incloent operadors aritmètics (+, -, *, /), comparacions (<, >, <=, >=, =, <>) i operadors lògics (and, or, not). 
+## Descripció de la gramàtica
 
+La regla `root` representa el punt d'entrada del programa, permetent una seqüència opcional de declaracions (statement) seguida del final de fitxer (`EOF`). La regla `statement` inclou tres branques:   
+- **ExpressionStatement**  
+    Representa qualsevol expressió que no estigui vinculada directament a la declaració d'una variable o funció. Aquest tipus de declaració permet executar expressions que poden retornar valors sense la necessitat de fer assignacions. Aquesta esta formada per la regla `expression`que explicaré més endavant.  
+- **DefineVar** 
+    Les declaracions de variables associen un identificador (VAR) a un valor mitjançant la paraula clau define. Aquesta forma només admet una expressió única com a valor assignat.  
+- **DefineFunction**: 
+    Les definicions de funcions permeten declarar funcions amb paràmetres i un o més cossos d'expressió. Les funcions definides poden ser cridades més tard, i s'executaran amb els arguments proporcionats. Cada crida de funció genera un nou entorn d'execució que mapeja els paràmetres als valors passats.
+
+He decidit separar les declaracions (statement) de les expressions generals perque crec que es diferencien en el fet de si són estructures que afecten l'entorn o el context del programa, com ara definir variables (DefineVar) o funcions (DefineFunction). Aquestes no produeixen un valor directament, sinó que creen associacions de noms o funcionalitats reutilitzables.
+
+La regla `expression` te diferents branques.
+- **VAR (Variable)** 
+    Aquesta regla defineix el patró per als noms de variables vàlids en Scheme. Una variable ha de començar amb una lletra (majúscula o minúscula) o un guió baix (_) i pot incloure lletres, números, guions baixos (_), guions (-) o símbols de pregunta (?) després del primer caràcter. 
+- **NUM (Nombre)** 
+    Aquesta regla identifica nombres enters. Un nombre pot incloure un signe negatiu (-) al principi per indicar valors negatius, seguit d'una o més xifres (0-9). No es consideren nombres decimals ni formats avançats, ja que es limita a valors enters.
+- **STRING (Cadena de text)** 
+    Aquesta regla descriu les cadenes de text, delimitades per cometes dobles ("). El contingut de la cadena pot incloure qualsevol caràcter excepte cometes dobles (") o salts de línia (\r o \n). Això permet treballar amb textos en les expressions sense trencar la sintaxi del llenguatge.
+
+- **Operacions bàsiques**
+    ```bash
+    LPAREN operation expression+ RPAREN 
+    ```
+    Representa operacions aritmètiques o comparatives que impliquen un operador (operation) seguit d'una o més expressions com a operands, delimitats per parèntesis.
+    
     ```scheme
     (+ 10 20) ; Hauria d'imprimir 30
     (- -20 5) ; Hauria d'imprimir -25
     ```
     Per a provar aquesta funcionalitat: `testOp.scm`
 
-- **Definició de constants**  
+- **Definició de variables**  
+    ```bash
+    LPAREN DEFINE VAR expression RPAREN 
+    ```
     Es poden definir variables o constants utilitzant define, que emmagatzema valors per a un ús posterior. 
 
     ```scheme
@@ -55,7 +80,10 @@ make clean
     ```
     Per a provar aquesta funcionalitat: `testVars.scm`
 
-- **Definició de funcions**  
+- **Definició de funcions** 
+    ```bash
+    LPAREN DEFINE LPAREN VAR VAR* RPAREN expression+ RPAREN 
+    ``` 
     És possible definir funcions personalitzades amb paràmetres i cossos d'expressió. Aquestes funcions es poden cridar posteriorment amb els arguments adequats. El sistema gestiona automàticament els escenaris d'assignació de paràmetres a valors i manté un entorn independent per a cada crida.
 
     ```scheme
@@ -85,15 +113,21 @@ make clean
     ```
     Per a provar aquesta funcionalitat: `testFuncionesPO.scm`
 
-- **Condicionals**  
-    Permet executar diferents camins d'execució segons una condició.
+- **Condicionals**
+    ```bash
+    LPAREN IF expression expression expression RPAREN
+    ``` 
+    Una estructura condicional que avalua una expressió de condició. Si és certa, retorna la segona expressió; en cas contrari, retorna la tercera. Permet executar diferents camins d'execució segons una condició.
     ```scheme
     (display (if (= 1 1) "Cert" "Fals")) ; Hauria d'imprimir "Cert"
     ```
 
     Per a provar aquesta funcionalitat: `testIfCond.scm`
 - **Condicions múltiples amb `cond`**  
-    Proporciona una estructura avançada per avaluar múltiples condicions fins que una sigui certa.
+    ```bash
+    LPAREN COND condClause+ RPAREN 
+    ``` 
+    Permet avaluar múltiples condicions mitjançant la forma cond, on cada condClause conté una condició i una expressió associada. Retorna la primera expressió associada a una condició certa.. Proporciona una estructura avançada per avaluar múltiples condicions fins que una sigui certa.
     ```scheme
     ; Ús de `cond`
     (define (classifica-nombre x)
@@ -105,6 +139,14 @@ make clean
     ```
     Per a provar aquesta funcionalitat: `testIfCond.scm`
 - **Llistes**  
+    ```bash
+    LPAREN CAR expression RPAREN
+    LPAREN CDR expression RPAREN
+    LPAREN CONS expression expression RPAREN
+    LPAREN NULL expression RPAREN 
+    SLASH LPAREN expression* RPAREN  
+    ``` 
+    
     L'intèrpret implementa funcions fonamentals per a la manipulació de llistes, com ara:
 
     - **car**: Obté el primer element d'una llista.
@@ -126,7 +168,10 @@ make clean
     Per a provar aquesta funcionalitat: `testLists.scm`
 
 - **Expressions `let`**  
-    Les expressions let permeten declarar variables locals dins d'un bloc, cosa que facilita l'organització i modularitat del codi.
+    ```bash
+    LPAREN LET LPAREN letPair+ RPAREN expression+ RPAREN
+    ``` 
+    Defineix variables locals dins d'un bloc let, on cada letPair associa un identificador amb una expressió. Aquestes variables són accessibles només dins del bloc. 
     ```scheme
     (let ((a 10)
          (b 20))
@@ -137,6 +182,11 @@ make clean
     Per a provar aquesta funcionalitat: `testLet.scm`
 
 - **Gestió d'Entrada/Sortida**  
+    ```bash
+    LPAREN DISPLAY expression RPAREN
+    LPAREN NEWLINE RPAREN
+    LPAREN READ RPAREN
+    ``` 
     - **read**: Llegeix entrades de l'usuari en temps d'execució, suportant valors simples i llistes en format Scheme.
     - **display**: Imprimeix valors a la consola, incloent llistes formatades en estil Scheme.
     - **newline**: Genera un salt de línia.
@@ -155,7 +205,11 @@ make clean
     En el cas del read, es pot verificar el que hauria de sortir en el fitxer `testIO_sortida.out`
 
 - **Booleans** 
-
+    ```bash
+    LPAREN AND expression+ RPAREN                         
+    LPAREN OR expression+ RPAREN
+    LPAREN NOT expression RPAREN   
+    ``` 
     ```scheme
     (and (> 3 2) (< 5 10))  ; Resultat: #t
     (or (> 3 2) (< 1 0))    ; Resultat: #t

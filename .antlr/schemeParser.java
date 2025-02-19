@@ -19,7 +19,7 @@ public class schemeParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, LPAREN=11, RPAREN=12, DEFINE=13, IF=14, BOOL=15, AND=16, OR=17, 
 		NOT=18, COND=19, CAR=20, CDR=21, CONS=22, NULL=23, LET=24, READ=25, DISPLAY=26, 
-		NEWLINE=27, SLASH=28, MOD=29, VAR=30, NUM=31, STRING=32, COMMENT=33, WS=34;
+		NEWLINE=27, QUOTE=28, MOD=29, VAR=30, NUM=31, STRING=32, COMMENT=33, WS=34;
 	public static final int
 		RULE_root = 0, RULE_statement = 1, RULE_expression = 2, RULE_condClause = 3, 
 		RULE_letPair = 4, RULE_operation = 5;
@@ -43,7 +43,7 @@ public class schemeParser extends Parser {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, "LPAREN", 
 			"RPAREN", "DEFINE", "IF", "BOOL", "AND", "OR", "NOT", "COND", "CAR", 
-			"CDR", "CONS", "NULL", "LET", "READ", "DISPLAY", "NEWLINE", "SLASH", 
+			"CDR", "CONS", "NULL", "LET", "READ", "DISPLAY", "NEWLINE", "QUOTE", 
 			"MOD", "VAR", "NUM", "STRING", "COMMENT", "WS"
 		};
 	}
@@ -390,7 +390,7 @@ public class schemeParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ListLiteralContext extends ExpressionContext {
-		public TerminalNode SLASH() { return getToken(schemeParser.SLASH, 0); }
+		public TerminalNode QUOTE() { return getToken(schemeParser.QUOTE, 0); }
 		public TerminalNode LPAREN() { return getToken(schemeParser.LPAREN, 0); }
 		public TerminalNode RPAREN() { return getToken(schemeParser.RPAREN, 0); }
 		public List<ExpressionContext> expression() {
@@ -702,7 +702,7 @@ public class schemeParser extends Parser {
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(102);
-				match(SLASH);
+				match(QUOTE);
 				setState(103);
 				match(LPAREN);
 				setState(107);

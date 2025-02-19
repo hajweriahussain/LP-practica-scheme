@@ -17,7 +17,7 @@ LET: 'let' ;
 READ : 'read';
 DISPLAY : 'display';
 NEWLINE : 'newline';
-SLASH : '\'';
+QUOTE : '\'';
 MOD: 'mod' ;
 VAR: [a-zA-Z_][a-zA-Z0-9_?-]* ;
 NUM: '-'? [0-9]+ ;
@@ -44,7 +44,7 @@ expression
     | LPAREN CDR expression RPAREN                          # CdrFunction
     | LPAREN CONS expression expression RPAREN              # ConsFunction
     | LPAREN NULL expression RPAREN                         # NullFunction
-    | SLASH LPAREN expression* RPAREN                       # ListLiteral
+    | QUOTE LPAREN expression* RPAREN                       # ListLiteral
     | LPAREN LET LPAREN letPair+ RPAREN expression+ RPAREN # LetExpression
     | LPAREN AND expression+ RPAREN                         # AndExpression
     | LPAREN OR expression+ RPAREN                          # OrExpression
